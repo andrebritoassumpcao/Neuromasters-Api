@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using neuromasters.borders.Entities;
 using neuromasters.repositories;
 using Serilog;
 using Serilog.Events;
@@ -25,7 +26,15 @@ try
 {
     Log.Information("Starting Neuromasters API");
 
+    builder.Services.AddDbContext<AuthDbContext>(
+        options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
+    builder.Services.AddAuthentication();
+    builder.Services.AddAuthorization();
+
+    builder.Services
+        .AddIdentityApiEndpoints<User>()
+        .AddEntityFrameworkStores<AuthDbContext>();
     // Configurar DbContext com PostgreSQL (ajuste a string de conexão no appsettings.json)
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
