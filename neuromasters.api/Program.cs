@@ -1,3 +1,5 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using neuromasters.borders.Entities;
@@ -26,6 +28,9 @@ try
 {
     Log.Information("Starting Neuromasters API");
 
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
     builder.Services.AddDbContext<AuthDbContext>(
         options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
@@ -35,18 +40,16 @@ try
     builder.Services
         .AddIdentityApiEndpoints<User>()
         .AddEntityFrameworkStores<AuthDbContext>();
-    // Configurar DbContext com PostgreSQL (ajuste a string de conexão no appsettings.json)
+
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-    // Adicionar controllers e configurar JSON para enums como string
     builder.Services.AddControllers()
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
         });
 
-    // Configurar Swagger com título e versão
     builder.Services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo
@@ -57,10 +60,8 @@ try
         });
     });
 
-    // Build app
     var app = builder.Build();
 
-    // Middleware para Swagger (apenas em desenvolvimento)
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -69,7 +70,11 @@ try
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neuromasters API v1");
             c.RoutePrefix = string.Empty; // Swagger na raiz (http://localhost:5000/)
         });
+        app.MapSwagger().RequireAuthorization();
     }
+    app.MapGet("/", () => "teste");
+   
+    app.MapIdentityApi<User>();
 
     app.UseSerilogRequestLogging();
 
