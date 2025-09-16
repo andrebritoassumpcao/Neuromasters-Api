@@ -8,6 +8,8 @@ namespace neuromasters.repositories;
 public class AuthDbContext(DbContextOptions<AuthDbContext> options)
     : IdentityDbContext<User>(options)
 {
+    public DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

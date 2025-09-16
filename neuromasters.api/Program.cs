@@ -73,7 +73,7 @@ try
         app.MapSwagger().RequireAuthorization();
     }
     app.MapGet("/", () => "teste");
-   
+
     app.MapIdentityApi<User>();
 
     app.UseSerilogRequestLogging();
