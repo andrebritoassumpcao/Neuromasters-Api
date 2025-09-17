@@ -18,7 +18,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\neuromasters.handlers\neuromasters.handlers.csproj" />
 		<ProjectReference Include="..\neuromasters.borders\neuromasters.borders.csproj" />
 	</ItemGroup>
 

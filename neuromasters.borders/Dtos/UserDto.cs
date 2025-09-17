@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace neuromasters.borders.Dtos;
 
-namespace neuromasters.borders.Dtos
-{
-    public class UserDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Token { get; set; }
-    }
-}
+public record UserDto(
+string Id,
+string FullName,
+string Email,
+string PhoneNumber,
+bool EmailConfirmed,
+bool PhoneNumberConfirmed,
+DateTime CreatedAt
+);

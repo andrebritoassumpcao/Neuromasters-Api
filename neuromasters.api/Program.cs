@@ -1,18 +1,24 @@
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using neuromasters.api.Configurations;
+using neuromasters.api.Extensions;
+using neuromasters.borders.Adapters.Interfaces;
+using neuromasters.borders.Adapters;
 using neuromasters.borders.Entities;
 using neuromasters.repositories;
 using Serilog;
 using Serilog.Events;
+using Microsoft.AspNetCore.Identity;
+using neuromasters.api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Carregar configurações (exemplo simples)
 var configuration = builder.Configuration;
+var appConfig = builder.Configuration.LoadConfiguration();
 
-    builder.Host.UseSerilog();
+
+builder.Host.UseSerilog();
 // Configurar Serilog
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -37,12 +43,29 @@ try
     builder.Services.AddAuthentication();
     builder.Services.AddAuthorization();
 
-    builder.Services
-        .AddIdentityApiEndpoints<User>()
-        .AddEntityFrameworkStores<AuthDbContext>();
+    builder.Services.AddIdentityCore<User>(options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireDigit = true;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services
+              .AddValidators()
+              .AddUseCases()
+              .AddRepositories(appConfig)
+              .AddScoped<IActionResultConverter, ActionResultConverter>()
+              .AddScoped<IUserAdapter, UserAdapter>();
+    ;
 
     builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -74,7 +97,7 @@ try
     }
     app.MapGet("/", () => "teste");
 
-    app.MapIdentityApi<User>();
+    //app.MapIdentityApi<User>();
 
     app.UseSerilogRequestLogging();
 

@@ -1,55 +1,27 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using neuromasters.api.Models;
+using neuromasters.borders.Dtos;
+using neuromasters.borders.Dtos.Auth;
 using neuromasters.borders.Entities;
+using neuromasters.borders.Shared;
+using neuromasters.borders.UseCases.Auth;
+using System.Net;
 
 namespace neuromasters.api.Controllers
 {
-    public class AuthController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController(IActionResultConverter actionResultConverter) : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
-
-    /*    // DTO para cadastro
-        public class RegisterRequest
-        {
-            public string DocumentNumber { get; set; } = null!;
-            public string Email { get; set; } = null!;
-            public string Password { get; set; } = null!;
-            public string FullName { get; set; } = null!;
-            public string PhoneNumber { get; set; } = null!;
-        }
+        private readonly IActionResultConverter _actionResultConverter = actionResultConverter;
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
-        {
-            var user = new User
-            {
-                Id
-                UserName = request.FullName,
-                Email = request.Email,
-                EmailConfirmed = request.Email,
-                PasswordHash = request.Password,
-                PhoneNumber = request.PhoneNumber,
-                PhoneNumberConfirmed
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<UserDto>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<UserDto>))]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<UserDto>))]
+        public async Task<IActionResult> CreateUser([FromBody] RegisterRequest request, [FromServices] IRegisterUserUseCase handler)
+                => _actionResultConverter.Convert(await handler.Execute(request));
 
-                
-            };
-
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            // opcional: atribuir Role
-            // await _userManager.AddToRoleAsync(user, "Cliente");
-
-            return Ok(new { message = "Usuário registrado com sucesso" });
-        }*/
     }
 }
