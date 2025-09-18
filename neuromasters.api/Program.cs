@@ -64,7 +64,8 @@ try
               .AddUseCases()
               .AddRepositories(appConfig)
               .AddScoped<IActionResultConverter, ActionResultConverter>()
-              .AddScoped<IUserAdapter, UserAdapter>();
+              .AddScoped<IUserAdapter, UserAdapter>()
+              .AddScoped<IRoleAdapter, RoleAdapter>(); ;
     ;
 
     builder.Services.AddControllers()

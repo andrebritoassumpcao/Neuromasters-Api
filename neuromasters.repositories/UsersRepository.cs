@@ -59,7 +59,7 @@ public class UsersRepository : IUsersRepository
             user.PhoneNumber ?? string.Empty,
             user.EmailConfirmed,
             user.PhoneNumberConfirmed,
-            DateTime.UtcNow // Identity não traz CreatedAt por padrão
+            DateTime.UtcNow
         );
     }
 }

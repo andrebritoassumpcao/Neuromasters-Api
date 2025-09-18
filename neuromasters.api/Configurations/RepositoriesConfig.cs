@@ -13,6 +13,7 @@ namespace neuromasters.api.Configurations
         public static IServiceCollection AddRepositories(this IServiceCollection services, ApplicationConfig appConfig)
         {
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
 
             return services;
         }
