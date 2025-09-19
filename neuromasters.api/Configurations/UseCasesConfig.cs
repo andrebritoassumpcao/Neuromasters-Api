@@ -9,6 +9,7 @@ public static class UseCasesConfig
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
+        services.AddScoped<ILoginUseCase, LoginUseCase>();
         services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
         services.AddScoped<IAssignRoleUseCase, AssignRoleUseCase>();
         services.AddScoped<IGetUserRoleUseCase, GetUserRoleUseCase>();

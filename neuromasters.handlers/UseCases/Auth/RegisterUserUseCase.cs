@@ -13,6 +13,7 @@ public class RegisterUserUseCase(
  ILogger<RegisterUserUseCase> logger,
  IValidator<RegisterRequest> validator,
  IUsersRepository repository,
+ IRolesRepository rolesRepository,
  IUserAdapter adapter) :
  UseCase<RegisterRequest, UserDto>(logger, validator),
  IRegisterUserUseCase
@@ -27,6 +28,18 @@ public class RegisterUserUseCase(
 
         var user = adapter.ToCreateUserDto(request);
         var createdUserId = await repository.CreateUserAsync(user);
+
+        var defaultRole = "Cliente";
+        var roleExists = await rolesRepository.RoleExistsAsync(defaultRole);
+        if (!roleExists)
+        {
+            await rolesRepository.CreateRoleAsync(defaultRole);
+        }
+
+        var assignedRole = await rolesRepository.AssignRoleToUserAsync(createdUserId, defaultRole);
+        if (!assignedRole)
+            return BadRequest(new ErrorMessage("40.3", "Erro ao atribuir role padrão ao usuário"));
+
         var response = await repository.GetUserByIdAsync(createdUserId);
         return response is null
             ? BadRequest(new ErrorMessage("40.2", "Erro"))

@@ -1,15 +1,18 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using neuromasters.api.Configurations;
 using neuromasters.api.Extensions;
-using neuromasters.borders.Adapters.Interfaces;
+using neuromasters.api.Models;
 using neuromasters.borders.Adapters;
+using neuromasters.borders.Adapters.Interfaces;
 using neuromasters.borders.Entities;
 using neuromasters.repositories;
 using Serilog;
 using Serilog.Events;
-using Microsoft.AspNetCore.Identity;
-using neuromasters.api.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,8 +68,27 @@ try
               .AddRepositories(appConfig)
               .AddScoped<IActionResultConverter, ActionResultConverter>()
               .AddScoped<IUserAdapter, UserAdapter>()
-              .AddScoped<IRoleAdapter, RoleAdapter>(); ;
-    ;
+              .AddScoped<IRoleAdapter, RoleAdapter>();
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+    });
 
     builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -83,7 +105,18 @@ try
             Description = "API para sistema de avaliação comportamental TEA"
         });
     });
+    var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:5173")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+    });
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
@@ -103,6 +136,10 @@ try
     app.UseSerilogRequestLogging();
 
     app.UseHttpsRedirection();
+
+    app.UseCors(MyAllowSpecificOrigins);
+
+    app.UseAuthentication();
 
     app.UseAuthorization();
 

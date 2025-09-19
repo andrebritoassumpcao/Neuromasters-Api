@@ -10,6 +10,7 @@ public static class ValidatorsConfig
     public static IServiceCollection AddValidators(this IServiceCollection services)
     {
         services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+        services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
         services.AddScoped<IValidator<CreateRoleRequest>, CreateRoleRequestValidator>();
         services.AddScoped<IValidator<AssignRoleRequest>, AssignRoleRequestValidator>();
         services.AddScoped<IValidator<GetUserRolesRequest>, GetUserRolesRequestValidator>();
