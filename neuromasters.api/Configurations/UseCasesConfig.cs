@@ -11,6 +11,7 @@ public static class UseCasesConfig
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
         services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
         services.AddScoped<IAssignRoleUseCase, AssignRoleUseCase>();
+        services.AddScoped<IGetUserRoleUseCase, GetUserRoleUseCase>();
         services.AddScoped<IListRolesUseCase, ListRolesUseCase>();
 
         return services;

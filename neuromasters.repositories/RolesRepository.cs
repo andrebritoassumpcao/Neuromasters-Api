@@ -24,7 +24,15 @@ namespace neuromasters.repositories
         {
             return await _roleManager.RoleExistsAsync(roleName);
         }
+        public async Task<string?> GetUserRoleAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                return null;
 
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.FirstOrDefault();
+        }
         public async Task<bool> CreateRoleAsync(string roleName)
         {
             if (await _roleManager.RoleExistsAsync(roleName))

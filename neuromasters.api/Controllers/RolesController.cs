@@ -20,6 +20,17 @@ public class RolesController(IActionResultConverter actionResultConverter) : Con
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleRequest request, [FromServices] ICreateRoleUseCase handler)
         => _actionResultConverter.Convert(await handler.Execute(request));
 
+    [HttpGet("{userId}/user-role")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<UserRoleDto>))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<UserRoleDto>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<UserRoleDto>))]
+    public async Task<IActionResult> GetUserRole([FromRoute] string userId,[FromServices] IGetUserRoleUseCase handler)
+    {
+        var request = new GetUserRolesRequest(userId);
+
+        return _actionResultConverter.Convert(await handler.Execute(request));
+    }
+
     [HttpPost("assign-role")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<RoleAssignmentDto>))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<RoleAssignmentDto>))]

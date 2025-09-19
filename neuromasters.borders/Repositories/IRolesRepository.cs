@@ -11,6 +11,7 @@ namespace neuromasters.borders.Repositories
     {
         // Gerenciamento de Roles
         Task<bool> RoleExistsAsync(string roleName);
+        Task<string?> GetUserRoleAsync(string userId);
         Task<bool> CreateRoleAsync(string roleName);
         Task<bool> DeleteRoleAsync(string roleName);
         Task<IEnumerable<RoleDto>> GetAllRolesAsync();
