@@ -19,6 +19,8 @@ public static class UseCasesConfig
         services.AddScoped<ICreateSkillGroupUseCase, CreateSkillGroupUseCase>();
         services.AddScoped<IListSkillGroupsUseCase, ListSkillGroupsUseCase>();
         services.AddScoped<IGetSkillGroupUseCase, GetSkillGroupUseCase>();
+        services.AddScoped<IUpdateSkillGroupUseCase, UpdateSkillGroupUseCase>();
+        services.AddScoped<IDeleteSkillGroupUseCase, DeleteSkillGroupUseCase>();
 
         return services;
     }

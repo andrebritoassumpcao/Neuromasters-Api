@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using neuromasters.borders.Dtos.Questionnaires.SkillGroups;
+using neuromasters.borders.Shared;
 
-namespace neuromasters.borders.UseCases.Questionnaires.SkillGroups
-{
-    internal interface IDeleteSkillGroupUseCase
-    {
-    }
-}
+namespace neuromasters.borders.UseCases.Questionnaires.SkillGroups;
+
+public interface IDeleteSkillGroupUseCase : IUseCase<GetSkillGroupRequest, bool>;

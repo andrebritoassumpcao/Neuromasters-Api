@@ -17,6 +17,7 @@ public static class ValidatorsConfig
         services.AddScoped<IValidator<GetUserRolesRequest>, GetUserRolesRequestValidator>();
         services.AddScoped<IValidator<GetSkillGroupRequest>, GetSkillGroupRequestValidator>();
         services.AddScoped<IValidator<CreateSkillGroupRequest>, CreateSkillGroupRequestValidator>();
+        services.AddScoped<IValidator<UpdateSkillGroupRequest>, UpdateSkillGroupRequestValidator>();
 
         return services;
     }

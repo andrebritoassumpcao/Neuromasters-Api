@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using neuromasters.borders.Adapters;
-using neuromasters.borders.Adapters.Interfaces;
 using neuromasters.borders.Dtos.Questionnaires.SkillGroups;
 using neuromasters.borders.Entities.Questionnaires;
 using neuromasters.borders.Repositories.Questionnaires;

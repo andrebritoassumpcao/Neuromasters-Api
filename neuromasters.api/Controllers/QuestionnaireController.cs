@@ -13,12 +13,20 @@ public class QuestionnaireController(IActionResultConverter actionResultConverte
 {
     private readonly IActionResultConverter _actionResultConverter = actionResultConverter;
 
+    #region SkillGroups
     [HttpPost("create-groups")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<SkillGroupDto>))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<SkillGroupDto>))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<SkillGroupDto>))]
     public async Task<IActionResult> CreateSkillGroup([FromBody] CreateSkillGroupRequest request, [FromServices] ICreateSkillGroupUseCase handler)
             => _actionResultConverter.Convert(await handler.Execute(request));
+
+    [HttpPut("update-groups")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    public async Task<IActionResult> UpdateSkillGroup([FromBody] UpdateSkillGroupRequest request, [FromServices] IUpdateSkillGroupUseCase handler)
+         => _actionResultConverter.Convert(await handler.Execute(request));
 
     [HttpGet("list-groups")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<IEnumerable<SkillGroupDto>>))]
@@ -27,14 +35,28 @@ public class QuestionnaireController(IActionResultConverter actionResultConverte
     public async Task<IActionResult> ListSkillGroups([FromServices] IListSkillGroupsUseCase handler)
         => _actionResultConverter.Convert(await handler.Execute());
 
-    [HttpGet("groups/{code}")]
+    [HttpGet("get-group/{code}")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<SkillGroupDto>))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<SkillGroupDto>))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<SkillGroupDto>))]
-    public async Task<IActionResult> GetUserRole([FromRoute] string code, [FromServices] IGetSkillGroupUseCase handler)
+    public async Task<IActionResult> GetSkillGroup([FromRoute] string code, [FromServices] IGetSkillGroupUseCase handler)
     {
         var request = new GetSkillGroupRequest(code);
 
         return _actionResultConverter.Convert(await handler.Execute(request));
     }
+
+    [HttpDelete("delete-group/{code}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<bool>))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<bool>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<bool>))]
+    public async Task<IActionResult> DeleteSkillGroup([FromRoute] string code, [FromServices] IDeleteSkillGroupUseCase handler)
+    {
+        var request = new GetSkillGroupRequest(code);
+
+        return _actionResultConverter.Convert(await handler.Execute(request));
+    }
+    #endregion
+
+
 }
