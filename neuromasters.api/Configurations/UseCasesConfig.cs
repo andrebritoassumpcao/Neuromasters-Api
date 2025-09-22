@@ -1,6 +1,8 @@
 ﻿using neuromasters.borders.UseCases.Auth;
+using neuromasters.borders.UseCases.Questionnaires.SkillGroups;
 using neuromasters.borders.UseCases.Roles;
 using neuromasters.handlers.UseCases.Auth;
+using neuromasters.handlers.UseCases.Questionnaires.SkillGroups;
 using neuromasters.handlers.UseCases.Roles;
 
 namespace neuromasters.api.Configurations;
@@ -14,6 +16,9 @@ public static class UseCasesConfig
         services.AddScoped<IAssignRoleUseCase, AssignRoleUseCase>();
         services.AddScoped<IGetUserRoleUseCase, GetUserRoleUseCase>();
         services.AddScoped<IListRolesUseCase, ListRolesUseCase>();
+        services.AddScoped<ICreateSkillGroupUseCase, CreateSkillGroupUseCase>();
+        services.AddScoped<IListSkillGroupsUseCase, ListSkillGroupsUseCase>();
+        services.AddScoped<IGetSkillGroupUseCase, GetSkillGroupUseCase>();
 
         return services;
     }

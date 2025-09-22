@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using neuromasters.borders.Dtos.Auth;
+using neuromasters.borders.Dtos.Questionnaires.SkillGroups;
 using neuromasters.borders.Dtos.Roles;
 using neuromasters.handlers.Validators;
 
@@ -14,6 +15,8 @@ public static class ValidatorsConfig
         services.AddScoped<IValidator<CreateRoleRequest>, CreateRoleRequestValidator>();
         services.AddScoped<IValidator<AssignRoleRequest>, AssignRoleRequestValidator>();
         services.AddScoped<IValidator<GetUserRolesRequest>, GetUserRolesRequestValidator>();
+        services.AddScoped<IValidator<GetSkillGroupRequest>, GetSkillGroupRequestValidator>();
+        services.AddScoped<IValidator<CreateSkillGroupRequest>, CreateSkillGroupRequestValidator>();
 
         return services;
     }

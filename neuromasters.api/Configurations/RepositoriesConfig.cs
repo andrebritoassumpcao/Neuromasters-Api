@@ -1,8 +1,10 @@
 ﻿using neuromasters.borders.Repositories;
+using neuromasters.borders.Repositories.Questionnaires;
 using neuromasters.borders.Shared;
 using neuromasters.borders.UseCases.Auth;
 using neuromasters.handlers.UseCases.Auth;
 using neuromasters.repositories;
+using neuromasters.repositories.Questionnaires;
 using System.Data;
 using System.Net.Mime;
 
@@ -14,6 +16,7 @@ namespace neuromasters.api.Configurations
         {
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
+            services.AddScoped<ISkillGroupRepository, SkillGroupRepository>();
 
             return services;
         }

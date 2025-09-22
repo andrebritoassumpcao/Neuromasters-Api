@@ -28,12 +28,10 @@ namespace neuromasters.handlers.UseCases.Auth
         {
             await validator.ValidateAndThrowAsync(request);
 
-            // Buscar usuário por email
             var user = await userManager.FindByEmailAsync(request.Email);
             if (user is null)
                 return BadRequest(new ErrorMessage("60.1", "Email ou senha inválidos"));
 
-            // Verificar senha
             var isValidPassword = await userManager.CheckPasswordAsync(user, request.Password);
             if (!isValidPassword)
                 return BadRequest(new ErrorMessage("60.2", "Email ou senha inválidos"));

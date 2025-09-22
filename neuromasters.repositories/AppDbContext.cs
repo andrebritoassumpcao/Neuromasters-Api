@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using neuromasters.borders.Entities;
+using neuromasters.borders.Entities.Questionnaires;
 
 namespace neuromasters.repositories;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<User> Users { get; set; }
-    // Adicione os DbSets para outras entidades aqui
+    public DbSet<SkillGroup> SkillGroups { get; set; }
+
 }
 
 

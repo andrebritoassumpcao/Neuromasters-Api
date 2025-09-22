@@ -68,7 +68,8 @@ try
               .AddRepositories(appConfig)
               .AddScoped<IActionResultConverter, ActionResultConverter>()
               .AddScoped<IUserAdapter, UserAdapter>()
-              .AddScoped<IRoleAdapter, RoleAdapter>();
+              .AddScoped<IRoleAdapter, RoleAdapter>()
+              .AddScoped<ISkillGroupAdapter, SkillGroupAdapter>();
 
     builder.Services.AddAuthentication(options =>
     {
