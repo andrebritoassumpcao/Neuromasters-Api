@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using neuromasters.api.Models;
+using neuromasters.borders.Dtos.Questionnaires;
 using neuromasters.borders.Dtos.Questionnaires.SkillGroups;
 using neuromasters.borders.Shared;
+using neuromasters.borders.UseCases.Questionnaires.Form;
 using neuromasters.borders.UseCases.Questionnaires.SkillGroups;
 using System.Net;
 
@@ -58,5 +60,10 @@ public class QuestionnaireController(IActionResultConverter actionResultConverte
     }
     #endregion
 
-
+    [HttpPost("create-form")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<SkillGroupDto>))]
+    public async Task<IActionResult> CreateForm([FromBody] CreateQuestionnaireRequest request, [FromServices] ICreateQuestionnaireUseCase handler)
+        => _actionResultConverter.Convert(await handler.Execute(request));
 }

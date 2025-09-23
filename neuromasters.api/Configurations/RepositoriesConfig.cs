@@ -17,6 +17,7 @@ namespace neuromasters.api.Configurations
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<ISkillGroupRepository, SkillGroupRepository>();
+            services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
 
             return services;
         }

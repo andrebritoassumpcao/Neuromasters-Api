@@ -1,7 +1,9 @@
 ﻿using neuromasters.borders.UseCases.Auth;
+using neuromasters.borders.UseCases.Questionnaires.Form;
 using neuromasters.borders.UseCases.Questionnaires.SkillGroups;
 using neuromasters.borders.UseCases.Roles;
 using neuromasters.handlers.UseCases.Auth;
+using neuromasters.handlers.UseCases.Questionnaires.Forms;
 using neuromasters.handlers.UseCases.Questionnaires.SkillGroups;
 using neuromasters.handlers.UseCases.Roles;
 
@@ -21,6 +23,7 @@ public static class UseCasesConfig
         services.AddScoped<IGetSkillGroupUseCase, GetSkillGroupUseCase>();
         services.AddScoped<IUpdateSkillGroupUseCase, UpdateSkillGroupUseCase>();
         services.AddScoped<IDeleteSkillGroupUseCase, DeleteSkillGroupUseCase>();
+        services.AddScoped<ICreateQuestionnaireUseCase, CreateQuestionnaireUseCase>();
 
         return services;
     }
