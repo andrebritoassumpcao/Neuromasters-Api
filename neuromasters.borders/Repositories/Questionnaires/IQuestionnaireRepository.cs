@@ -1,4 +1,5 @@
 ﻿using neuromasters.borders.Dtos.Questionnaires;
+using neuromasters.borders.Entities.Questionnaires;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace neuromasters.borders.Repositories.Questionnaires
 {
     public interface IQuestionnaireRepository
     {
-        Task<QuestionnaireDetailDto> AddAsync(CreateQuestionnaireRequest request);
+        Task<Questionnaire> AddAsync(Questionnaire entity);
+
+        Task<Questionnaire> UpdateAsync(Questionnaire entity);
 
         Task<IEnumerable<QuestionnaireDto>> GetAllAsync();
 
-        Task<QuestionnaireDetailDto?> GetByIdWithDetailsAsync(int id);
+        Task<Questionnaire?> GetByIdWithDetailsAsync(int id);
 
         Task<QuestionnaireDto?> GetByIdAsync(int id);
 

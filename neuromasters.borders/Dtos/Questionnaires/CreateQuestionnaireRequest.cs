@@ -1,15 +1,11 @@
 ﻿using neuromasters.borders.Dtos.Questionnaires.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using neuromasters.borders.Entities.Enums;
 
-namespace neuromasters.borders.Dtos.Questionnaires
-{
-    public record CreateQuestionnaireRequest(
-           string Name,
-           string? Description,
-           IEnumerable<CreateFormSectionRequest> Sections
-       );
-}
+namespace neuromasters.borders.Dtos.Questionnaires;
+
+public record CreateQuestionnaireRequest(
+       string Name,
+       string? Description,
+       QuestionnaireStatusEnum Status,
+       IEnumerable<CreateFormSectionRequest> Sections
+   );

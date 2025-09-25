@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using neuromasters.borders.Entities.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace neuromasters.borders.Entities.Questionnaires;
@@ -17,7 +18,7 @@ public class Questionnaire
     public string? Description { get; set; }
 
     [Column("form_status")]
-    public string Status { get; set; } = "draft";
+    public QuestionnaireStatusEnum Status { get; set; } = QuestionnaireStatusEnum.Draft;
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;

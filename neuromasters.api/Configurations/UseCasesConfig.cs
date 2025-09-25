@@ -18,12 +18,20 @@ public static class UseCasesConfig
         services.AddScoped<IAssignRoleUseCase, AssignRoleUseCase>();
         services.AddScoped<IGetUserRoleUseCase, GetUserRoleUseCase>();
         services.AddScoped<IListRolesUseCase, ListRolesUseCase>();
+
+        //SkillGroup
         services.AddScoped<ICreateSkillGroupUseCase, CreateSkillGroupUseCase>();
         services.AddScoped<IListSkillGroupsUseCase, ListSkillGroupsUseCase>();
         services.AddScoped<IGetSkillGroupUseCase, GetSkillGroupUseCase>();
         services.AddScoped<IUpdateSkillGroupUseCase, UpdateSkillGroupUseCase>();
         services.AddScoped<IDeleteSkillGroupUseCase, DeleteSkillGroupUseCase>();
+
+        //Forms
         services.AddScoped<ICreateQuestionnaireUseCase, CreateQuestionnaireUseCase>();
+        services.AddScoped<IListQuestionnairesUseCase, ListQuestionnairesUseCase>();
+        services.AddScoped<IGetQuestionnaireUseCase, GetQuestionnaireUseCase>();
+        services.AddScoped<IUpdateQuestionnaireUseCase, UpdateQuestionnaireUseCase>();
+        services.AddScoped<IDeleteQuestionnaireUseCase, DeleteQuestionnaireUseCase>();
 
         return services;
     }

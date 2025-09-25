@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
+using neuromasters.borders.Adapters.Interfaces;
 using neuromasters.borders.Dtos.Questionnaires;
 using neuromasters.borders.Repositories.Questionnaires;
 using neuromasters.borders.Shared;
@@ -10,6 +11,7 @@ namespace neuromasters.handlers.UseCases.Questionnaires.Forms;
 public class CreateQuestionnaireUseCase(
       ILogger<CreateQuestionnaireUseCase> logger,
       IValidator<CreateQuestionnaireRequest> validator,
+      IQuestionnaireAdapter adapter,
       IQuestionnaireRepository repository)
       : UseCase<CreateQuestionnaireRequest, QuestionnaireDetailDto>(logger, validator),
         ICreateQuestionnaireUseCase
@@ -18,8 +20,10 @@ public class CreateQuestionnaireUseCase(
     {
         await validator.ValidateAndThrowAsync(request);
 
-        var created = await repository.AddAsync(request);
+        var entity = adapter.CreateRequestToEntity(request);
+        var created = await repository.AddAsync(entity);
+        var dto = adapter.EntityToDetailDto(created);
 
-        return Persisted(created, created.Id.ToString());
+        return Success(dto);
     }
 }

@@ -20,56 +20,18 @@ namespace neuromasters.repositories.Questionnaires
             _context = context;
         }
 
-        public async Task<QuestionnaireDetailDto> AddAsync(CreateQuestionnaireRequest request)
+        public async Task<Questionnaire> AddAsync(Questionnaire entity)
         {
-            var questionnaire = new Questionnaire
-            {
-                Name = request.Name,
-                Description = request.Description,
-                Status = "draft",
-                CreatedAt = DateTime.UtcNow
-            };
+            _context.Questionnaires.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
-            _context.Questionnaires.Add(questionnaire);
-            await _context.SaveChangesAsync(); 
-
-            var sections = new List<FormSection>();
-            foreach (var sectionRequest in request.Sections)
-            {
-                var section = new FormSection
-                {
-                    FormId = questionnaire.Id,
-                    Name = sectionRequest.Name,
-                    Order = sectionRequest.Order
-                };
-
-                _context.FormSections.Add(section);
-                await _context.SaveChangesAsync(); 
-
-                var questions = new List<FormQuestion>();
-                foreach (var questionRequest in sectionRequest.Questions)
-                {
-                    var question = new FormQuestion
-                    {
-                        SectionId = section.Id,
-                        Text = questionRequest.Text,
-                        Observations = questionRequest.Observations,
-                        Order = questionRequest.Order
-                    };
-
-                    _context.FormQuestions.Add(question);
-                    questions.Add(question);
-                }
-
-                await _context.SaveChangesAsync();
-
-                section.Questions = questions;
-                sections.Add(section);
-            }
-
-            questionnaire.Sections = sections;
-
-            return MapToDetailDto(questionnaire);
+        public async Task<Questionnaire> UpdateAsync(Questionnaire entity)
+        {
+            _context.Questionnaires.Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<IEnumerable<QuestionnaireDto>> GetAllAsync()
@@ -82,15 +44,12 @@ namespace neuromasters.repositories.Questionnaires
             return questionnaires.Select(MapToDto);
         }
 
-        public async Task<QuestionnaireDetailDto?> GetByIdWithDetailsAsync(int id)
+        public async Task<Questionnaire?> GetByIdWithDetailsAsync(int id)
         {
-            var questionnaire = await _context.Questionnaires
-                .AsNoTracking()
-                .Include(q => q.Sections.OrderBy(s => s.Order))
-                    .ThenInclude(s => s.Questions.OrderBy(q => q.Order))
+            return await _context.Questionnaires
+                .Include(q => q.Sections)
+                    .ThenInclude(s => s.Questions)
                 .FirstOrDefaultAsync(q => q.Id == id);
-
-            return questionnaire is null ? null : MapToDetailDto(questionnaire);
         }
 
         public async Task<QuestionnaireDto?> GetByIdAsync(int id)
@@ -123,25 +82,5 @@ namespace neuromasters.repositories.Questionnaires
         private static QuestionnaireDto MapToDto(Questionnaire entity)
             => new(entity.Id, entity.Name, entity.Description, entity.Status, entity.CreatedAt);
 
-        private static QuestionnaireDetailDto MapToDetailDto(Questionnaire entity)
-            => new(
-                entity.Id,
-                entity.Name,
-                entity.Description,
-                entity.Status,
-                entity.CreatedAt,
-                entity.Sections?.Select(MapToSectionDto) ?? Enumerable.Empty<FormSectionDto>()
-            );
-
-        private static FormSectionDto MapToSectionDto(FormSection entity)
-            => new(
-                entity.Id,
-                entity.Name,
-                entity.Order,
-                entity.Questions?.Select(MapToQuestionDto) ?? Enumerable.Empty<FormQuestionDto>()
-            );
-
-        private static FormQuestionDto MapToQuestionDto(FormQuestion entity)
-            => new(entity.Id, entity.Text, entity.Observations, entity.Order);
     }
 }

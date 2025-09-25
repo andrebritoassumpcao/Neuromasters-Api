@@ -69,6 +69,7 @@ try
               .AddScoped<IActionResultConverter, ActionResultConverter>()
               .AddScoped<IUserAdapter, UserAdapter>()
               .AddScoped<IRoleAdapter, RoleAdapter>()
+              .AddScoped<IQuestionnaireAdapter, QuestionnaireAdapter>()
               .AddScoped<ISkillGroupAdapter, SkillGroupAdapter>();
 
     builder.Services.AddAuthentication(options =>
