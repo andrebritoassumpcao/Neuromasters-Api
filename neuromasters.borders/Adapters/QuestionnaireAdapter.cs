@@ -36,45 +36,52 @@ public class QuestionnaireAdapter : IQuestionnaireAdapter
 
     public Questionnaire UpdateRequestToEntity(UpdateQuestionnaireRequest request, Questionnaire existingEntity)
     {
-        existingEntity.Name = request.Name;
-        existingEntity.Description = request.Description;
+        if (request.Name is not null)
+            existingEntity.Name = request.Name;
+
+        if (request.Description is not null)
+            existingEntity.Description = request.Description;
+
         existingEntity.Status = request.Status;
         existingEntity.UpdatedAt = DateTime.UtcNow;
 
-        foreach (var sectionRequest in request.Sections)
+        if (request.Sections is not null)
         {
-            var section = existingEntity.Sections
-                .FirstOrDefault(s => s.Id == sectionRequest.Id);
-
-            if (section is null)
+            foreach (var sectionRequest in request.Sections)
             {
-                section = new FormSection
+                var section = existingEntity.Sections
+                    .FirstOrDefault(s => s.Id == sectionRequest.Id);
+
+                if (section is null)
                 {
-                    FormId = existingEntity.Id
-                };
-                existingEntity.Sections.Add(section);
-            }
-
-            section.Name = sectionRequest.Name;
-            section.Order = sectionRequest.Order;
-
-            foreach (var questionRequest in sectionRequest.Questions)
-            {
-                var question = section.Questions
-                    .FirstOrDefault(q => q.Id == questionRequest.Id);
-
-                if (question is null)
-                {
-                    question = new FormQuestion
+                    section = new FormSection
                     {
-                        SectionId = section.Id
+                        FormId = existingEntity.Id
                     };
-                    section.Questions.Add(question);
+                    existingEntity.Sections.Add(section);
                 }
 
-                question.Text = questionRequest.Text;
-                question.Observations = questionRequest.Observations;
-                question.Order = questionRequest.Order;
+                section.Name = sectionRequest.Name;
+                section.Order = sectionRequest.Order;
+
+                foreach (var questionRequest in sectionRequest.Questions)
+                {
+                    var question = section.Questions
+                        .FirstOrDefault(q => q.Id == questionRequest.Id);
+
+                    if (question is null)
+                    {
+                        question = new FormQuestion
+                        {
+                            SectionId = section.Id
+                        };
+                        section.Questions.Add(question);
+                    }
+
+                    question.Text = questionRequest.Text;
+                    question.Observations = questionRequest.Observations;
+                    question.Order = questionRequest.Order;
+                }
             }
         }
 

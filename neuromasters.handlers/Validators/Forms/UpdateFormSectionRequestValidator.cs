@@ -16,15 +16,5 @@ public class UpdateFormSectionRequestValidator : AbstractValidator<UpdateFormSec
             .NotEmpty().WithMessage("O ID da seção é obrigatório.")
             .GreaterThan(0).WithMessage("O ID da seção deve ser um número positivo.");
 
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("O nome da seção é obrigatório.")
-            .MaximumLength(250).WithMessage("O nome da seção não pode exceder 250 caracteres.");
-
-        RuleFor(x => x.Order)
-            .GreaterThanOrEqualTo(0).WithMessage("A ordem da seção deve ser um número não negativo.");
-
-        RuleFor(x => x.Questions)
-            .NotEmpty().WithMessage("Cada seção deve conter pelo menos uma pergunta.")
-            .ForEach(question => question.SetValidator(new UpdateFormQuestionRequestValidator())); // Validador para cada pergunta
     }
 }

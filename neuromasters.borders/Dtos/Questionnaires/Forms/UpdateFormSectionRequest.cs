@@ -10,6 +10,6 @@ public record UpdateFormSectionRequest(
               int Id,
               string Name,
               int Order,
-              IEnumerable<UpdateFormQuestionRequest> Questions
+              IEnumerable<UpdateFormQuestionRequest>? Questions
               );
 

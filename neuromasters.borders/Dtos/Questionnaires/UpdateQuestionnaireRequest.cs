@@ -10,9 +10,9 @@ namespace neuromasters.borders.Dtos.Questionnaires
 {
     public record UpdateQuestionnaireRequest(
           int Id,
-          string Name,
+          string? Name,
           string? Description,
           QuestionnaireStatusEnum Status,
-          IEnumerable<UpdateFormSectionRequest> Sections
+          IEnumerable<UpdateFormSectionRequest>? Sections
       );
 }
