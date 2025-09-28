@@ -1,8 +1,10 @@
 ﻿using neuromasters.borders.UseCases.Auth;
+using neuromasters.borders.UseCases.Questionnaires.DefaultAswers;
 using neuromasters.borders.UseCases.Questionnaires.Form;
 using neuromasters.borders.UseCases.Questionnaires.SkillGroups;
 using neuromasters.borders.UseCases.Roles;
 using neuromasters.handlers.UseCases.Auth;
+using neuromasters.handlers.UseCases.Questionnaires.DefaultAswers;
 using neuromasters.handlers.UseCases.Questionnaires.Forms;
 using neuromasters.handlers.UseCases.Questionnaires.SkillGroups;
 using neuromasters.handlers.UseCases.Roles;
@@ -32,6 +34,10 @@ public static class UseCasesConfig
         services.AddScoped<IGetQuestionnaireUseCase, GetQuestionnaireUseCase>();
         services.AddScoped<IUpdateQuestionnaireUseCase, UpdateQuestionnaireUseCase>();
         services.AddScoped<IDeleteQuestionnaireUseCase, DeleteQuestionnaireUseCase>();
+        services.AddScoped<ICreateDefaultAnswerUseCase, CreateDefaultAnswerUseCase>();
+        services.AddScoped<IListDefaultAnswerUseCase, ListDefaultAnswerUseCase>();
+        services.AddScoped<IGetDefaultAnswerUseCase, GetDefaultAnswerUseCase>();
+        services.AddScoped<IDeleteDefaultAnswerUseCase, DeleteDefaultAnswerUseCase>();
 
         return services;
     }

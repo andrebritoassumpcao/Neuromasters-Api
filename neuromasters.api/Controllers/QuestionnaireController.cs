@@ -7,6 +7,8 @@ using neuromasters.borders.Shared;
 using neuromasters.borders.UseCases.Questionnaires.Form;
 using neuromasters.borders.UseCases.Questionnaires.SkillGroups;
 using System.Net;
+using neuromasters.borders.Dtos.Questionnaires.DefaultAswers;
+using neuromasters.borders.UseCases.Questionnaires.DefaultAswers;
 
 namespace neuromasters.api.Controllers;
 
@@ -100,6 +102,48 @@ public class QuestionnaireController(IActionResultConverter actionResultConverte
     public async Task<IActionResult> DeleteForm([FromRoute] int code, [FromServices] IDeleteQuestionnaireUseCase handler)
     {
         var request = new GetQuestionnaireRequest(code);
+
+        return _actionResultConverter.Convert(await handler.Execute(request));
+    }
+
+    //DefaultAnswers
+
+    [HttpPost("create-default-answer")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DefaultAnswerDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<DefaultAnswerDto>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<DefaultAnswerDto>))]
+    public async Task<IActionResult> CreateDefaultAnswer([FromBody] CreateDefaultAnswerRequest request, [FromServices] ICreateDefaultAnswerUseCase handler)
+    => _actionResultConverter.Convert(await handler.Execute(request));
+
+    [HttpGet("list-default-answers/{questionnaireId}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<DefaultAnswerDto>))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<IEnumerable<DefaultAnswerDto>>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<IEnumerable<DefaultAnswerDto>>))]
+    public async Task<IActionResult> ListDefaultAnswers([FromRoute] int questionnaireId, [FromServices] IListDefaultAnswerUseCase handler)
+    {
+        var request = new ListDefaultAnswerRequest(questionnaireId);
+
+        return _actionResultConverter.Convert(await handler.Execute(request));
+    }
+
+    [HttpGet("get-default-answer/{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DefaultAnswerDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<DefaultAnswerDto>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<DefaultAnswerDto>))]
+    public async Task<IActionResult> GetDefaultAnswer([FromRoute] int id, [FromServices] IGetDefaultAnswerUseCase handler)
+    {
+        var request = new GetDefaultAnswerRequest(id);
+
+        return _actionResultConverter.Convert(await handler.Execute(request));
+    }
+
+    [HttpDelete("delete-default-answer/{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(bool))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<bool>))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<bool>))]
+    public async Task<IActionResult> DeleteDefaultAnswer([FromRoute] int id, [FromServices] IDeleteDefaultAnswerUseCase handler)
+    {
+        var request = new GetDefaultAnswerRequest(id);
 
         return _actionResultConverter.Convert(await handler.Execute(request));
     }

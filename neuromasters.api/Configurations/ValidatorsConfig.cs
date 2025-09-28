@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using neuromasters.borders.Dtos.Auth;
 using neuromasters.borders.Dtos.Questionnaires;
+using neuromasters.borders.Dtos.Questionnaires.DefaultAswers;
 using neuromasters.borders.Dtos.Questionnaires.Forms;
 using neuromasters.borders.Dtos.Questionnaires.SkillGroups;
 using neuromasters.borders.Dtos.Roles;
@@ -31,6 +32,9 @@ public static class ValidatorsConfig
         services.AddScoped<IValidator<UpdateQuestionnaireRequest>, UpdateQuestionnaireRequestValidator>();
         services.AddScoped<IValidator<UpdateFormSectionRequest>, UpdateFormSectionRequestValidator>();
         services.AddScoped<IValidator<UpdateFormQuestionRequest>, UpdateFormQuestionRequestValidator>();
+        services.AddScoped<IValidator<CreateDefaultAnswerRequest>, CreateDefaultAnswerRequestValidator>();
+        services.AddScoped<IValidator<ListDefaultAnswerRequest>, ListDefaultAnswerRequestValidator>();
+        services.AddScoped<IValidator<GetDefaultAnswerRequest>, GetDefaultAnswerRequestValidator>();
 
 
         return services;

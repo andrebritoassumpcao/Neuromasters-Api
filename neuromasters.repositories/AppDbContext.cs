@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<Questionnaire> Questionnaires { get; set; }
     public DbSet<FormSection> FormSections { get; set; }
     public DbSet<FormQuestion> FormQuestions { get; set; }
+    public DbSet<DefaultAnswer> DefaultAnswers { get; set; }
 
 }
 

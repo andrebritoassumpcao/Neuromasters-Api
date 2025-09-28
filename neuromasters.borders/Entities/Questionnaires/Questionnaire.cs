@@ -28,4 +28,5 @@ public class Questionnaire
 
     public ICollection<FormSection> Sections { get; set; } = new List<FormSection>();
     public ICollection<FormResponse> Responses { get; set; } = new List<FormResponse>();
+    public ICollection<DefaultAnswer> DefaultAnswers { get; set; } = new List<DefaultAnswer>();
 }
