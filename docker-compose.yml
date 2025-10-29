@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: neuromasters_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bl22vc55
+      POSTGRES_DB: neuromasters.api
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d neuromasters.api"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neuromasters_api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=neuromasters.api;Username=postgres;Password=bl22vc55"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  db_data:
