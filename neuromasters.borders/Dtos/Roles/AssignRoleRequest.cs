@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace neuromasters.borders.Dtos.Roles;
 
-public record AssignRoleRequest(string UserId, string RoleName);
+public record AssignRoleRequest(string UserId, string RoleId);

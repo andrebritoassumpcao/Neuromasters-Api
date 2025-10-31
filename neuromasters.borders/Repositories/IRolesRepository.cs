@@ -16,12 +16,14 @@ namespace neuromasters.borders.Repositories
         Task<bool> DeleteRoleAsync(string roleName);
         Task<IEnumerable<RoleDto>> GetAllRolesAsync();
         Task<RoleDto?> GetRoleByNameAsync(string roleName);
+        Task<RoleDto?> GetRoleByIdAsync(string roleId);
 
         // Atribuição de Roles a Usuários
         Task<bool> UserHasRoleAsync(string userId, string roleName);
         Task<bool> AssignRoleToUserAsync(string userId, string roleName);
         Task<bool> RemoveRoleFromUserAsync(string userId, string roleName);
-        Task<IEnumerable<string>> GetUserRolesAsync(string userId);
+        Task<string?> SetSingleRoleForUserByIdAsync(string userId, string roleId);
+        Task<IEnumerable<RoleDto>> GetUserRolesAsync(string userId);
         Task<IEnumerable<UserRoleDto>> GetUsersInRoleAsync(string roleName);
 
         // RoleClaims (opcional, mas poderoso)

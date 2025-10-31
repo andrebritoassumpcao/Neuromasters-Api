@@ -11,31 +11,32 @@ using global::neuromasters.borders.UseCases.Roles;
 
 namespace neuromasters.handlers.UseCases.Roles
 {
-
-    public class GetUserRoleUseCase(
-        ILogger<GetUserRoleUseCase> logger,
+    public class GetUserRolesUseCase(
+        ILogger<GetUserRolesUseCase> logger,
         IUsersRepository usersRepository,
         IValidator<GetUserRolesRequest> validator,
         IRolesRepository rolesRepository) :
-        UseCase<GetUserRolesRequest, UserRoleDto>(logger, validator),
-        IGetUserRoleUseCase
+        UseCase<GetUserRolesRequest, UserRolesDto>(logger, validator),
+        IGetUserRolesUseCase
     {
-        protected override async Task<UseCaseResponse<UserRoleDto>> OnExecute(GetUserRolesRequest request)
+        protected override async Task<UseCaseResponse<UserRolesDto>> OnExecute(GetUserRolesRequest request)
         {
+            await validator.ValidateAndThrowAsync(request);
 
             var user = await usersRepository.GetUserByIdAsync(request.UserId);
             if (user is null)
                 return BadRequest(new ErrorMessage("53.1", "Usuário não encontrado"));
 
-            var role = await rolesRepository.GetUserRoleAsync(request.UserId);
-            if (string.IsNullOrEmpty(role))
-                return BadRequest(new ErrorMessage("53.2", "Usuário sem role atribuída"));
+            var roles = (await rolesRepository.GetUserRolesAsync(request.UserId)).ToList();
 
-            var response = new UserRoleDto(
+            if (roles.Count == 0)
+                return BadRequest(new ErrorMessage("53.2", "Usuário sem roles atribuídas"));
+
+            var response = new UserRolesDto(
                 user.Id,
-                user.Email,
-                user.FullName,
-                role
+                user.Email ?? string.Empty,
+                user.FullName ?? string.Empty,
+                roles
             );
 
             return Success(response);

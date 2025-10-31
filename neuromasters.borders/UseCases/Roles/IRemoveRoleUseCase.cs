@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace neuromasters.borders.UseCases.Roles;
+namespace neuromasters.borders.UseCases.Roles
+{
+    public interface IRemoveRoleUseCase : IUseCase<AssignRoleRequest, UserRolesDto>;
 
-public interface IGetUserRoleUseCase : IUseCase<GetUserRolesRequest, UserRoleDto>;
-
+}

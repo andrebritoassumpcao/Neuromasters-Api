@@ -11,10 +11,8 @@ public class AssignRoleRequestValidator : AbstractValidator<AssignRoleRequest>
             .NotEmpty()
             .WithMessage("UserId é obrigatório");
 
-        RuleFor(x => x.RoleName)
+        RuleFor(x => x.RoleId)
             .NotEmpty()
-            .WithMessage("Nome da role é obrigatório")
-            .MinimumLength(2)
-            .WithMessage("Nome da role deve ter pelo menos 2 caracteres");
+            .WithMessage("Id da role é obrigatório");
     }
 }

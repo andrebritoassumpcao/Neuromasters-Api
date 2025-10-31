@@ -21,10 +21,10 @@ public class RolesController(IActionResultConverter actionResultConverter) : Con
         => _actionResultConverter.Convert(await handler.Execute(request));
 
     [HttpGet("{userId}/user-role")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UseCaseResponse<UserRoleDto>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserRoleDto))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<UserRoleDto>))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<UserRoleDto>))]
-    public async Task<IActionResult> GetUserRole([FromRoute] string userId,[FromServices] IGetUserRoleUseCase handler)
+    public async Task<IActionResult> GetUserRole([FromRoute] string userId, [FromServices] IGetUserRolesUseCase handler)
     {
         var request = new GetUserRolesRequest(userId);
 
@@ -36,6 +36,13 @@ public class RolesController(IActionResultConverter actionResultConverter) : Con
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UseCaseResponse<RoleAssignmentDto>))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UseCaseResponse<RoleAssignmentDto>))]
     public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequest request, [FromServices] IAssignRoleUseCase handler)
+    => _actionResultConverter.Convert(await handler.Execute(request));
+
+    [HttpDelete("remove-role")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UserRolesDto))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(UserRolesDto))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(UserRolesDto))]
+    public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequest request, [FromServices] IRemoveRoleUseCase handler)
     => _actionResultConverter.Convert(await handler.Execute(request));
 
     [HttpGet("roles")]

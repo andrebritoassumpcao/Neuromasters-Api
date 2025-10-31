@@ -63,7 +63,11 @@ namespace neuromasters.repositories
             var role = await _roleManager.FindByNameAsync(roleName);
             return role is null ? null : new RoleDto(role.Id, role.Name ?? string.Empty);
         }
-
+        public async Task<RoleDto?> GetRoleByIdAsync(string roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            return role is null ? null : new RoleDto(role.Id, role.Name ?? string.Empty);
+        }
         #endregion
 
         #region Atribuição de Roles a Usuários
@@ -87,12 +91,35 @@ namespace neuromasters.repositories
                 return false;
 
             if (await _userManager.IsInRoleAsync(user, roleName))
-                return false; // Usuário já tem essa role
+                return false; 
 
             var result = await _userManager.AddToRoleAsync(user, roleName);
             return result.Succeeded;
         }
+        public async Task<string?> SetSingleRoleForUserByIdAsync(string userId, string roleId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+                return null;
 
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role is null)
+                return null;
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            if (currentRoles.Any())
+            {
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
+                    return null;
+            }
+
+            var addResult = await _userManager.AddToRoleAsync(user, role.Name!);
+            if (!addResult.Succeeded)
+                return null;
+
+            return role.Name!;
+        }
         public async Task<bool> RemoveRoleFromUserAsync(string userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -100,33 +127,44 @@ namespace neuromasters.repositories
                 return false;
 
             if (!await _userManager.IsInRoleAsync(user, roleName))
-                return false; // Usuário não tem essa role
+                return false;
 
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
             return result.Succeeded;
         }
 
-        public async Task<IEnumerable<string>> GetUserRolesAsync(string userId)
+        public async Task<IEnumerable<RoleDto>> GetUserRolesAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user is null)
-                return new List<string>();
+                return Enumerable.Empty<RoleDto>();
 
-            return await _userManager.GetRolesAsync(user);
+            var roleNames = await _userManager.GetRolesAsync(user);
+            if (roleNames is null || roleNames.Count == 0)
+                return Enumerable.Empty<RoleDto>();
+
+            var roles = await _roleManager.Roles
+                .Where(r => roleNames.Contains(r.Name))
+                .Select(r => new RoleDto(r.Id, r.Name!))
+                .ToListAsync();
+
+            return roles.OrderBy(r => r.Name);
         }
 
         public async Task<IEnumerable<UserRoleDto>> GetUsersInRoleAsync(string roleName)
         {
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role is null)
                 return new List<UserRoleDto>();
 
-            var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
+            var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name!);
 
             return usersInRole.Select(u => new UserRoleDto(
                 u.Id,
                 u.Email ?? string.Empty,
                 u.UserName ?? string.Empty,
-                roleName
+                role.Id, 
+                role.Name!    
             ));
         }
 

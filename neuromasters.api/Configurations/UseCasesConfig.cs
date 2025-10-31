@@ -18,8 +18,9 @@ public static class UseCasesConfig
         services.AddScoped<ILoginUseCase, LoginUseCase>();
         services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
         services.AddScoped<IAssignRoleUseCase, AssignRoleUseCase>();
-        services.AddScoped<IGetUserRoleUseCase, GetUserRoleUseCase>();
+        services.AddScoped<IGetUserRolesUseCase, GetUserRolesUseCase>();
         services.AddScoped<IListRolesUseCase, ListRolesUseCase>();
+        services.AddScoped<IRemoveRoleUseCase, RemoveRoleUseCase>();
 
         //SkillGroup
         services.AddScoped<ICreateSkillGroupUseCase, CreateSkillGroupUseCase>();

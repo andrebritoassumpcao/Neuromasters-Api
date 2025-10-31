@@ -30,20 +30,11 @@ namespace neuromasters.handlers.UseCases.Roles
             if (user is null)
                 return BadRequest(new ErrorMessage("51.1", "Usuário não encontrado"));
 
-            var roleExists = await rolesRepository.RoleExistsAsync(request.RoleName);
-            if (!roleExists)
-                return BadRequest(new ErrorMessage("51.2", "Role não existe no sistema"));
-
-            var userAlreadyHasRole = await rolesRepository.UserHasRoleAsync(request.UserId, request.RoleName);
-            if (userAlreadyHasRole)
-                return BadRequest(new ErrorMessage("51.3", "Usuário já possui essa role"));
-
-            var assignmentResult = await rolesRepository.AssignRoleToUserAsync(request.UserId, request.RoleName);
-            if (!assignmentResult)
+            var assignedRoleName = await rolesRepository.SetSingleRoleForUserByIdAsync(request.UserId, request.RoleId);
+            if (assignedRoleName is null)
                 return BadRequest(new ErrorMessage("51.4", "Erro ao atribuir role ao usuário"));
 
-            var response = adapter.ToRoleAssignmentDto(user, request.RoleName);
-
+            var response = adapter.ToRoleAssignmentDto(user, assignedRoleName);
             return Persisted(response, $"{response.UserId}-{response.RoleName}");
         }
     }
